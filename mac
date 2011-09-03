@@ -5,8 +5,8 @@ osascript -e 'tell app "System Events" to activate'
 osascript -e 'tell app "System Events" to display dialog "If you have not enabled FileVault, do so now and restart your machine.\n\n(The Security preference pane has been opened for you.)\n\nOnly click \"OK\" when your drive is encrypted." buttons {"Cancel", "OK"} default button 2'
 
 echo "Installing gcc for OS X."
-  curl -L https://github.com/downloads/kennethreitz/osx-gcc-installer/GCC-10.7-v2.pkg > /tmp/gcc.pkg
-  sudo installer -pkg /tmp/gcc.pkg -target /
+  # curl -L https://github.com/downloads/kennethreitz/osx-gcc-installer/GCC-10.7-v2.pkg > /tmp/gcc.pkg
+  sudo installer -pkg /tmp/gcc.pkg -target /Volumes/Macintosh\ HD
   rm /tmp/gcc.pkg
 
 echo "Installing Homebrew, a good OS X package manager."
@@ -22,8 +22,11 @@ echo "Install git and gist tools."
 echo "Installing a recent version of curl and wget for HTTP requests."
   brew install curl wget
 
+osascript -e 'tell app "System Events" to activate'
+osascript -e 'tell app "System Events" to display dialog "MySQL time - stop now!" buttons {"Cancel", "OK"} default button 2'
+
 echo "Installing MySQL, our standard database server."
-  brew install mysql --assume-
+  brew install mysql
   unset TMPDIR
   mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=/usr/local/var/mysql --tmpdir=/tmp
   mysql.server start
@@ -45,7 +48,7 @@ echo "To prevent issues with Apache, please turn on Web Sharing now."
 echo "Installing bash-completion and putting it into .bash_profile."
   brew install bash-completion
 
-echo "
+echo '
 # Find homebrew prefix if it is available.
 brew_prefix=$(brew --prefix)
 
@@ -55,7 +58,7 @@ if [ -f $brew_prefix/etc/bash_completion ]; then
 fi
 
 # Put homebrew PHP ahead in $PATH a la http://justinhileman.info/article/reinstalling-php-53-on-mac-os-x/
-export PATH=$brew_prefix/sbin:$brew_prefix/bin:$PATH" > ~/.bashrc
+export PATH=$brew_prefix/sbin:$brew_prefix/bin:$PATH' > ~/.bashrc
 
 echo "Installing RVM (Ruby Version Manager) ..."
   curl -s https://rvm.beginrescueend.com/install/rvm -o rvm-installer ; chmod +x rvm-installer ; ./rvm-installer --version latest
@@ -70,5 +73,8 @@ echo "Installing Drush, because we <3 Drupal."
 echo "Installing MacVim, since it's the best."
   brew install macvim
   brew linkapps
+
+osascript -e 'tell app "System Events" to activate'
+osascript -e 'tell app "System Events" to display dialog "Stop now!" buttons {"Cancel", "OK"} default button 2'
 
 bash < <(curl -s https://raw.github.com/treehouseagency/laptop/master/ruby)
