@@ -6,40 +6,29 @@ Laptop is a set of scripts to get your laptop set up as a development machine.
 Mac OS X
 --------
 
-First, install [GCC for OS X](https://github.com/kennethreitz/osx-gcc-installer). (requires OS X 10.6 or higher)
+First, enable FileVault in the Security preference pane.
+Keep the key someplace safe.
+Reboot.
 
-Then, run this one-liner:
+Grab XCode from the App Store and install it.
+
+Then, open Terminal and run this one-liner:
 
     bash < <(curl -s https://raw.github.com/treehouseagency/laptop/master/mac)
-
-Ubuntu
-------
-
-First, install [Ubuntu](http://www.ubuntu.com/download).
-
-Then, run this one-liner:
-
-    bash < <(curl -s https://raw.github.com/treehouseagency/laptop/master/ubuntu)
-
-If you're setting up Ubuntu for one of our workshops, we recommend you also install gEdit for your text editor.
-You can [customize it with these instructions](http://blog.sudobits.com/2011/04/02/textmate-for-ubuntu-linux/).
 
 What it sets up
 ---------------
 
-* SSH public keys (for authenticating with services like Github and Heroku)
-* Homebrew or apt-get (for managing operating system libraries)
-* Ack (for finding things in files)
-* Tmux (for saving project state and switching between projects)
-* Postgres (for storing relational data)
-* Redis (for storing key-value data)
-* ImageMagick (for cropping and resizing images)
+* Homebrew
+* MySQL 5.5.14 (with some good performance configuration for a dev machine)
+* coreutils and findutils with the 'g' prefix (so we don't miss out on Linux goodness)
+* PHP 5.3.8 with MSSQL and MySQL support
+* VirtualBox 4.1.2
+* phpsh
+* drush and drush-toolbox
 * RVM (for managing versions of the Ruby programming language)
 * Ruby 1.9.2 stable (for writing general-purpose code)
-* Bundler gem (for managing Ruby libraries)
-* Rails gem (for writing web applications)
-* Heroku gem (for interacting with the Heroku API)
-* Taps gem (for pushing and pulling SQL databases between environments)
-* Postgres gem (for making Ruby talk to SQL databases)
+* Vagrant gem (for managing VirtualBox virtual machines)
+* Veewee gem (to allow building VirtualBox virtual machines through Ruby)
 
-It should take about 30 minutes for everything to install, depending on your machine.
+It should take about 40 minutes for everything to install, depending on your machine.
