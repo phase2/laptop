@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+!/usr/bin/env bash
 
 function need_sudo {
   osascript -e 'tell app "System Events" to activate'
@@ -41,21 +41,25 @@ echo "Installing MySQL, our standard database server."
   mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=/usr/local/var/mysql --tmpdir=/tmp
   mysql.server start
 
-echo "Installing Homebrew's PHP with MSSQL, MySQL and internationalization support."
+echo "Installing a test phpinfo.php in the new DocumentRoot."
+  [[ -d $HOME/htdocs ]] || {
+    mkdir $HOME/htdocs
+    echo '<?php phpinfo();' > $HOME/htdocs/phpinfo.php
+  }
+
+echo "Installing Homebrew's PHP, MySQL and internationalization support."
   brew install https://github.com/adamv/homebrew-alt/raw/master/duplicates/php.rb --with-mysql --with-intl
   curl -fsSL https://gist.github.com/raw/9f0504965c5a3ac6e641/21853d00b80cc0610968c86993b5ffcf6e6221a9/gistfile1.txt | sed -e "s/@@USER@@/$USER/" > /tmp/httpd.conf
-  curl -fsSl https://gist.github.com/raw/d5c3b90c11081ccaac6e/3e34c0d85c299beb23290b5bd321a0d534e07340/gistfile1.txt > /tmp/httpd-extra-config.conf
+  curl -fsSL https://gist.github.com/raw/d5c3b90c11081ccaac6e/3e34c0d85c299beb23290b5bd321a0d534e07340/gistfile1.txt > /tmp/httpd-extra-config.conf
+  curl -fsSL https://gist.github.com/raw/ce375c5af73ec5ae9f27/5ac7aa5df31ec3df8b91cfa7e1fb79af9a978d43/gistfile1.txt | sed -e "s/@@USER@@/$USER/" > /tmp/httpd-vhosts.conf
   need_sudo
   sudo mv /tmp/httpd.conf /etc/apache2/httpd.conf
   sudo mv /tmp/httpd-extra-config.conf /etc/apache2/extra/httpd-extra-config.conf
+  sudo mv /tmp/httpd-vhosts.conf /etc/apache2/extra/httpd-vhosts.conf
   chmod -R ug+w /usr/local/Cellar/php/5.3.8/lib/php
   pear config-set php_ini /usr/local/etc/php.ini
 
-echo "Installing a test phpinfo.php in the new DocumentRoot."
-  mkdir $HOME/htdocs
-  echo '<?php phpinfo();' > $HOME/htdocs/phpinfo.php
-
-open /System/Library/PreferencePanes/Sharing.prefPane
+open /System/Library/PreferencePanes/SharingPref.prefPane
 osascript -e 'tell app "System Events" to activate'
 osascript -e 'tell app "System Events" to display dialog "To prevent issues with Apache, please turn on Web Sharing now.\n\nClick \"OK\" once it has started to view the phpinfo() page." buttons {"Cancel", "OK"} default button 2'
 open http://localhost/phpinfo.php
@@ -75,6 +79,11 @@ fi
 # Put homebrew PHP ahead in $PATH a la http://justinhileman.info/article/reinstalling-php-53-on-mac-os-x/
 export PATH=$brew_prefix/sbin:$brew_prefix/bin:$PATH' > $HOME/.bashrc
 
+echo '
+if [ -f ~/.bashrc ]; then
+   source ~/.bashrc
+fi' > $HOME/.bash_profile
+
 echo "Installing RVM (Ruby Version Manager) ..."
   curl -s https://rvm.beginrescueend.com/install/rvm -o rvm-installer ; chmod +x rvm-installer ; ./rvm-installer --version latest
   echo "
@@ -90,13 +99,6 @@ echo "Upping max open files limit."
     need_sudo
     sudo sh -c 'echo "limit maxfiles 16384" > /etc/launchd.conf'
   }
-
-echo "Installing VirtualBox for virtualization."
-  curl -fsSL http://download.virtualbox.org/virtualbox/4.1.2/VirtualBox-4.1.2-73507-OSX.dmg > $HOME/Downloads/VirtualBox-4.1.2-73507-OSX.dmg
-  open $HOME/Downloads/VirtualBox-4.1.2-73507-OSX.dmg
-  need_sudo
-  sudo installer -pkg /Volumes/VirtualBox/VirtualBox.mpkg -target /Volumes/Macintosh\ HD
-  hdiutil eject /Volumes/VirtualBox
 
 echo "Installing phpsh for PHP development awesomeness."
   mkdir $HOME/Documents/Development
@@ -114,6 +116,10 @@ echo "Installing drush-toolbox for even more awesomeness."
 
 bash < <(curl -s https://raw.github.com/treehouseagency/laptop/master/ruby)
 
+echo "Installing VirtualBox for virtualization."
+  curl -fsSL http://download.virtualbox.org/virtualbox/4.1.2/VirtualBox-4.1.2-73507-OSX.dmg > $HOME/Downloads/VirtualBox-4.1.2-73507-OSX.dmg
+  open $HOME/Downloads/VirtualBox-4.1.2-73507-OSX.dmg
+
 osascript -e 'tell app "System Events" to activate'
-osascript -e 'tell app "System Events" to display dialog "At this point, you should restart and continue setting up your machine.\n\nWelcome to the Treehouse!" buttons {"OK"}'
+osascript -e 'tell app "System Events" to display dialog "Please install VirtualBox and then restart.\n\nWelcome to the Treehouse!" buttons {"OK"}'
 
