@@ -14,13 +14,9 @@ function need_sudo {
 }
 
 type -p gcc > /dev/null || {
-  open /Applications/App\ Store.app
   osascript -e 'tell app "System Events" to activate'
-  osascript -e 'tell app "System Events" to display dialog "If you have not installed XCode, do so now before clicking \"OK\".\n\n(The App Store has been opened for you.)" buttons {"Cancel", "OK"} default button 2'
-  osascript -e 'tell app "App Store" to activate'
-}
-
-type -p gcc > /dev/null || {
+  osascript -e 'tell app "System Events" to display dialog "Please install XCode now.\n\n(The App Store has been opened for you.)" buttons {"Cancel", "OK"} default button 2'
+  open /Applications/App\ Store.app
   echo "ERROR: Cannot find gcc. Try starting this process again."
   exit 1
 }
