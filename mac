@@ -4,10 +4,9 @@ open /System/Library/PreferencePanes/Security.prefPane
 osascript -e 'tell app "System Events" to activate'
 osascript -e 'tell app "System Events" to display dialog "If you have not enabled FileVault, do so now and restart your machine.\n\n(The Security preference pane has been opened for you.)\n\nOnly click \"OK\" when your drive is encrypted." buttons {"Cancel", "OK"} default button 2'
 
-echo "Installing gcc for OS X."
-  # curl -L https://github.com/downloads/kennethreitz/osx-gcc-installer/GCC-10.7-v2.pkg > /tmp/gcc.pkg
-  sudo installer -pkg /tmp/gcc.pkg -target /Volumes/Macintosh\ HD
-  rm /tmp/gcc.pkg
+open /Applications/App\ Store.app
+osascript -e 'tell app "System Events" to activate'
+osascript -e 'tell app "System Events" to display dialog "If you have not installed XCode, do so now before clicking \"OK\".\n\n(The App Store has been opened for you.)" buttons {"Cancel", "OK"} default button 2'
 
 echo "Installing Homebrew, a good OS X package manager."
   /usr/bin/ruby -e "$(curl -fsSL https://raw.github.com/gist/323731)"
@@ -22,18 +21,11 @@ echo "Install git and gist tools."
 echo "Installing a recent version of curl and wget for HTTP requests."
   brew install curl wget
 
-osascript -e 'tell app "System Events" to activate'
-osascript -e 'tell app "System Events" to display dialog "MySQL time - stop now!" buttons {"Cancel", "OK"} default button 2'
-
 echo "Installing MySQL, our standard database server."
   brew install mysql
   unset TMPDIR
   mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=/usr/local/var/mysql --tmpdir=/tmp
   mysql.server start
-
-echo "Installing innotop to give you insight into MySQL."
-  sudo cpan -i DBD::mysql
-  brew install innotop
 
 echo "Installing Homebrew's PHP with MSSQL, MySQL and internationalization support."
   brew install https://github.com/adamv/homebrew-alt/raw/master/duplicates/php.rb --with-mssql --with-mysql --with-intl
@@ -42,8 +34,9 @@ echo "Installing Homebrew's PHP with MSSQL, MySQL and internationalization suppo
   chmod -R ug+w /usr/local/Cellar/php/5.3.8/lib/php
   pear config-set php_ini /usr/local/etc/php.ini
 
-echo "To prevent issues with Apache, please turn on Web Sharing now."
-  open /System/Library/PreferencePanes/SharingPref.prefPane/
+open /System/Library/PreferencePanes/Sharing.prefPane
+osascript -e 'tell app "System Events" to activate'
+osascript -e 'tell app "System Events" to display dialog "To prevent issues with Apache, please turn on Web Sharing now.\n\nClick \"OK\" once it has started." buttons {"Cancel", "OK"} default button 2'
 
 echo "Installing bash-completion and putting it into .bash_profile."
   brew install bash-completion
@@ -70,11 +63,11 @@ echo "Installing RVM (Ruby Version Manager) ..."
 echo "Installing Drush, because we <3 Drupal."
   brew install drush
 
-echo "Installing MacVim, since it's the best."
-  brew install macvim
-  brew linkapps
+echo "Upping max open files limit."
+  [[ -f /etc/launchd.conf ]] || sudo sh -c 'echo "limit maxfiles 16384" > /etc/launchd.conf'
 
 osascript -e 'tell app "System Events" to activate'
 osascript -e 'tell app "System Events" to display dialog "Stop now!" buttons {"Cancel", "OK"} default button 2'
 
 bash < <(curl -s https://raw.github.com/treehouseagency/laptop/master/ruby)
+
