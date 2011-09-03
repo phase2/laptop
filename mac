@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+function need_sudo {
+  osascript -e 'tell app "System Events" to activate'
+  osascript -e 'tell app "System Events" to display dialog "Your sudo password is (likely) needed in the Terminal." buttons {"OK"}'
+  osascript -e 'tell app "Terminal" to activate'
+}
+
 open /System/Library/PreferencePanes/Security.prefPane
 osascript -e 'tell app "System Events" to activate'
 osascript -e 'tell app "System Events" to display dialog "If you have not enabled FileVault, do so now and restart your machine.\n\n(The Security preference pane has been opened for you.)\n\nOnly click \"OK\" when your drive is encrypted." buttons {"Cancel", "OK"} default button 2'
@@ -9,6 +15,7 @@ osascript -e 'tell app "System Events" to activate'
 osascript -e 'tell app "System Events" to display dialog "If you have not installed XCode, do so now before clicking \"OK\".\n\n(The App Store has been opened for you.)" buttons {"Cancel", "OK"} default button 2'
 
 echo "Installing Homebrew, a good OS X package manager."
+  need_sudo
   /usr/bin/ruby -e "$(curl -fsSL https://raw.github.com/gist/323731)"
   brew update
 
@@ -29,8 +36,11 @@ echo "Installing MySQL, our standard database server."
 
 echo "Installing Homebrew's PHP with MSSQL, MySQL and internationalization support."
   brew install https://github.com/adamv/homebrew-alt/raw/master/duplicates/php.rb --with-mssql --with-mysql --with-intl
-  sed -e's#libexec/apache2/libphp5.so#/usr/local/Cellar/php/5.3.8/libexec/apache2/libphp5.so#;s/#LoadModule php5_module/LoadModule php5_module/' /etc/apache2/httpd.conf > /tmp/httpd.conf
+  curl -fsSL https://gist.github.com/raw/9f0504965c5a3ac6e641/21853d00b80cc0610968c86993b5ffcf6e6221a9/gistfile1.txt | sed -e "s/@@USER@@/$USER/" > /tmp/httpd.conf
+  curl -fsSl https://gist.github.com/raw/d5c3b90c11081ccaac6e/3e34c0d85c299beb23290b5bd321a0d534e07340/gistfile1.txt > /tmp/httpd-extra-config.conf
+  need_sudo
   sudo mv /tmp/httpd.conf /etc/apache2/httpd.conf
+  sudo mv /tmp/httpd-extra-config.conf /etc/apache2/extra/httpd-extra-config.conf
   chmod -R ug+w /usr/local/Cellar/php/5.3.8/lib/php
   pear config-set php_ini /usr/local/etc/php.ini
 
@@ -64,10 +74,17 @@ echo "Installing Drush, because we <3 Drupal."
   brew install drush
 
 echo "Upping max open files limit."
-  [[ -f /etc/launchd.conf ]] || sudo sh -c 'echo "limit maxfiles 16384" > /etc/launchd.conf'
+  [[ -f /etc/launchd.conf ]] || {
+    need_sudo
+    sudo sh -c 'echo "limit maxfiles 16384" > /etc/launchd.conf'
+  }
 
-osascript -e 'tell app "System Events" to activate'
-osascript -e 'tell app "System Events" to display dialog "Stop now!" buttons {"Cancel", "OK"} default button 2'
+echo "Installing VirtualBox for virtualization."
+  curl -fsSL http://download.virtualbox.org/virtualbox/4.1.2/VirtualBox-4.1.2-73507-OSX.dmg > $HOME/Downloads/VirtualBox-4.1.2-73507-OSX.dmg
+  open $HOME/Downloads/VirtualBox-4.1.2-73507-OSX.dmg
+  need_sudo
+  sudo installer -pkg /Volumes/VirtualBox/VirtualBox.mpkg -target /Volumes/Macintosh\ HD
+  hdiutil eject /Volumes/VirtualBox
 
 bash < <(curl -s https://raw.github.com/treehouseagency/laptop/master/ruby)
 
