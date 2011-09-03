@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+open /System/Library/PreferencePanes/Security.prefPane
+osascript -e 'tell app "System Events" to activate'
+osascript -e 'tell app "System Events" to display dialog "If you have not enabled FileVault, do so now and restart your machine.\n\n(The Security preference pane has been opened for you.)\n\nOnly click \"OK\" when your drive is encrypted." buttons {"Cancel", "OK"} default button 2'
+
 echo "Installing gcc for OS X."
   curl -L https://github.com/downloads/kennethreitz/osx-gcc-installer/GCC-10.7-v2.pkg > /tmp/gcc.pkg
   sudo installer -pkg /tmp/gcc.pkg -target /
@@ -19,7 +23,7 @@ echo "Installing a recent version of curl and wget for HTTP requests."
   brew install curl wget
 
 echo "Installing MySQL, our standard database server."
-  brew install mysql
+  brew install mysql --assume-
   unset TMPDIR
   mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=/usr/local/var/mysql --tmpdir=/tmp
   mysql.server start
