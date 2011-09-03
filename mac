@@ -1,24 +1,57 @@
 #!/usr/bin/env bash
 
-echo "Installing Homebrew, a good OS X package manager ..."
+echo "Installing gcc for OS X."
+  curl -L https://github.com/downloads/kennethreitz/osx-gcc-installer/GCC-10.7-v2.pkg > /tmp/gcc.pkg
+  sudo installer -pkg /tmp/gcc.pkg -target /
+  rm /tmp/gcc.pkg
+
+echo "Installing Homebrew, a good OS X package manager."
   /usr/bin/ruby -e "$(curl -fsSL https://raw.github.com/gist/323731)"
   brew update
 
+echo "Installing GNU userland tools."
+  brew install coreutils gnu-sed findutils
+
+echo "Install git and gist tools."
+  brew install git gist
+
+echo "Installing a recent version of curl and wget for HTTP requests."
+  brew install curl wget
+
 echo "Installing MySQL, our standard database server."
   brew install mysql
-  # @TODO: Install MySQL.
   unset TMPDIR
   mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=/usr/local/var/mysql --tmpdir=/tmp
-
-echo "Starting MySQL."
   mysql.server start
 
 echo "Installing innotop to give you insight into MySQL."
   sudo cpan -i DBD::mysql
   brew install innotop
 
-echo "Installing htop to view processes."
-  brew install htop
+echo "Installing Homebrew's PHP with MSSQL, MySQL and internationalization support."
+  brew install https://github.com/adamv/homebrew-alt/raw/master/duplicates/php.rb --with-mssql --with-mysql --with-intl
+  sed -e's#libexec/apache2/libphp5.so#/usr/local/Cellar/php/5.3.8/libexec/apache2/libphp5.so#;s/#LoadModule php5_module/LoadModule php5_module/' /etc/apache2/httpd.conf > /tmp/httpd.conf
+  sudo mv /tmp/httpd.conf /etc/apache2/httpd.conf
+  chmod -R ug+w /usr/local/Cellar/php/5.3.8/lib/php
+  pear config-set php_ini /usr/local/etc/php.ini
+
+echo "To prevent issues with Apache, please turn on Web Sharing now."
+  open /System/Library/PreferencePanes/SharingPref.prefPane/
+
+echo "Installing bash-completion and putting it into .bash_profile."
+  brew install bash-completion
+
+echo "
+# Find homebrew prefix if it is available.
+brew_prefix=$(brew --prefix)
+
+# Enable bash_completion from brew.
+if [ -f $brew_prefix/etc/bash_completion ]; then
+  . $brew_prefix/etc/bash_completion
+fi
+
+# Put homebrew PHP ahead in $PATH a la http://justinhileman.info/article/reinstalling-php-53-on-mac-os-x/
+export PATH=$brew_prefix/sbin:$brew_prefix/bin:$PATH" > ~/.bashrc
 
 echo "Installing RVM (Ruby Version Manager) ..."
   curl -s https://rvm.beginrescueend.com/install/rvm -o rvm-installer ; chmod +x rvm-installer ; ./rvm-installer --version latest
@@ -26,5 +59,12 @@ echo "Installing RVM (Ruby Version Manager) ..."
 # RVM
 [[ -s '/Users/`whoami`/.rvm/scripts/rvm' ]] && source '/Users/`whoami`/.rvm/scripts/rvm'" >> ~/.bashrc
   source ~/.bashrc
+
+echo "Installing Drush, because we <3 Drupal."
+  brew install drush
+
+echo "Installing MacVim, since it's the best."
+  brew install macvim
+  brew linkapps
 
 bash < <(curl -s https://raw.github.com/treehouseagency/laptop/master/ruby)
