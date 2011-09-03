@@ -33,6 +33,9 @@ echo "Installing a recent version of curl and wget for HTTP requests."
   brew install curl wget
 
 echo "Installing MySQL, our standard database server."
+  curl -fsSL https://gist.github.com/raw/ee51e16448d49fcc123e/f6520b9489b3c17da742467b2b082189796223c2/gistfile1.txt > /tmp/my.cnf
+  need_sudo
+  sudo mv /tmp/my.cnf /etc/my.cnf
   brew install mysql
   unset TMPDIR
   mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=/usr/local/var/mysql --tmpdir=/tmp
@@ -70,14 +73,14 @@ if [ -f $brew_prefix/etc/bash_completion ]; then
 fi
 
 # Put homebrew PHP ahead in $PATH a la http://justinhileman.info/article/reinstalling-php-53-on-mac-os-x/
-export PATH=$brew_prefix/sbin:$brew_prefix/bin:$PATH' > ~/.bashrc
+export PATH=$brew_prefix/sbin:$brew_prefix/bin:$PATH' > $HOME/.bashrc
 
 echo "Installing RVM (Ruby Version Manager) ..."
   curl -s https://rvm.beginrescueend.com/install/rvm -o rvm-installer ; chmod +x rvm-installer ; ./rvm-installer --version latest
   echo "
 # RVM
-[[ -s '/Users/`whoami`/.rvm/scripts/rvm' ]] && source '/Users/`whoami`/.rvm/scripts/rvm'" >> ~/.bashrc
-  source ~/.bashrc
+[[ -s '/Users/`whoami`/.rvm/scripts/rvm' ]] && source '/Users/`whoami`/.rvm/scripts/rvm'" >> $HOME/.bashrc
+  source $HOME/.bashrc
 
 echo "Installing Drush, because we <3 Drupal."
   brew install drush
@@ -95,5 +98,22 @@ echo "Installing VirtualBox for virtualization."
   sudo installer -pkg /Volumes/VirtualBox/VirtualBox.mpkg -target /Volumes/Macintosh\ HD
   hdiutil eject /Volumes/VirtualBox
 
+echo "Installing phpsh for PHP development awesomeness."
+  mkdir $HOME/Documents/Development
+  cd $HOME/Documents/Development
+  git clone https://github.com/facebook/phpsh.git
+  cd phpsh
+  python setup.py build
+  need_sudo
+  sudo python setup.py install
+
+echo "Installing drush-toolbox for even more awesomeness."
+  [[ -d $HOME/.drush ]] || mkdir $HOME/.drush
+  cd $HOME/.drush
+  git clone https://github.com/zroger/drush-toolbox.git
+
 bash < <(curl -s https://raw.github.com/treehouseagency/laptop/master/ruby)
+
+osascript -e 'tell app "System Events" to activate'
+osascript -e 'tell app "System Events" to display dialog "At this point, you should restart and continue setting up your machine.\n\nWelcome to the Treehouse!" buttons {"OK"}'
 
