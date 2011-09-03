@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-echo "Installing gcc for OS X."
-  curl -L https://github.com/downloads/kennethreitz/osx-gcc-installer/GCC-10.7-v2.pkg > /tmp/gcc.pkg
-  sudo installer -pkg /tmp/gcc.pkg -target /
-  rm /tmp/gcc.pkg
-
 echo "Installing Homebrew, a good OS X package manager."
   /usr/bin/ruby -e "$(curl -fsSL https://raw.github.com/gist/323731)"
   brew update
@@ -41,7 +36,7 @@ echo "To prevent issues with Apache, please turn on Web Sharing now."
 echo "Installing bash-completion and putting it into .bash_profile."
   brew install bash-completion
 
-echo "
+echo '
 # Find homebrew prefix if it is available.
 brew_prefix=$(brew --prefix)
 
@@ -51,7 +46,7 @@ if [ -f $brew_prefix/etc/bash_completion ]; then
 fi
 
 # Put homebrew PHP ahead in $PATH a la http://justinhileman.info/article/reinstalling-php-53-on-mac-os-x/
-export PATH=$brew_prefix/sbin:$brew_prefix/bin:$PATH" > ~/.bashrc
+export PATH=$brew_prefix/sbin:$brew_prefix/bin:$PATH' > ~/.bashrc
 
 echo "Installing RVM (Ruby Version Manager) ..."
   curl -s https://rvm.beginrescueend.com/install/rvm -o rvm-installer ; chmod +x rvm-installer ; ./rvm-installer --version latest
