@@ -2,7 +2,7 @@
 
 function need_sudo {
   osascript -e 'tell app "System Events" to activate'
-  osascript -e 'tell app "System Events" to display dialog "Your sudo password is (likely) needed in the Terminal." buttons {"OK"}'
+  osascript -e 'tell app "System Events" to display dialog "Your sudo password is (likely) needed in the Terminal or will be very shortly." buttons {"OK"}'
   osascript -e 'tell app "Terminal" to activate'
 }
 
@@ -13,6 +13,10 @@ osascript -e 'tell app "System Events" to display dialog "If you have not enable
 open /Applications/App\ Store.app
 osascript -e 'tell app "System Events" to activate'
 osascript -e 'tell app "System Events" to display dialog "If you have not installed XCode, do so now before clicking \"OK\".\n\n(The App Store has been opened for you.)" buttons {"Cancel", "OK"} default button 2'
+type -p gcc > /dev/null || {
+  echo "Cannot find gcc. Try starting this process again."
+  exit 1
+}
 
 echo "Installing Homebrew, a good OS X package manager."
   need_sudo
@@ -44,9 +48,14 @@ echo "Installing Homebrew's PHP with MSSQL, MySQL and internationalization suppo
   chmod -R ug+w /usr/local/Cellar/php/5.3.8/lib/php
   pear config-set php_ini /usr/local/etc/php.ini
 
+echo "Installing a test phpinfo.php in the new DocumentRoot."
+  mkdir $HOME/htdocs
+  echo '<?php phpinfo();' > $HOME/htdocs/phpinfo.php
+
 open /System/Library/PreferencePanes/Sharing.prefPane
 osascript -e 'tell app "System Events" to activate'
-osascript -e 'tell app "System Events" to display dialog "To prevent issues with Apache, please turn on Web Sharing now.\n\nClick \"OK\" once it has started." buttons {"Cancel", "OK"} default button 2'
+osascript -e 'tell app "System Events" to display dialog "To prevent issues with Apache, please turn on Web Sharing now.\n\nClick \"OK\" once it has started to view the phpinfo() page." buttons {"Cancel", "OK"} default button 2'
+open http://localhost/phpinfo.php
 
 echo "Installing bash-completion and putting it into .bash_profile."
   brew install bash-completion
