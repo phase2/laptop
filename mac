@@ -42,13 +42,13 @@ echo "Installing MySQL, our standard database server."
   mysql.server start
 
 echo "Installing Homebrew's PHP with MSSQL, MySQL and internationalization support."
-  brew install https://github.com/adamv/homebrew-alt/raw/368f06add59fd6303c21af161b36f5d23518e09e/duplicates/php.rb --with-mssql --with-mysql --with-intl
+  brew install https://github.com/adamv/homebrew-alt/raw/master/duplicates/php.rb --with-mysql --with-intl
   curl -fsSL https://gist.github.com/raw/9f0504965c5a3ac6e641/21853d00b80cc0610968c86993b5ffcf6e6221a9/gistfile1.txt | sed -e "s/@@USER@@/$USER/" > /tmp/httpd.conf
   curl -fsSl https://gist.github.com/raw/d5c3b90c11081ccaac6e/3e34c0d85c299beb23290b5bd321a0d534e07340/gistfile1.txt > /tmp/httpd-extra-config.conf
   need_sudo
   sudo mv /tmp/httpd.conf /etc/apache2/httpd.conf
   sudo mv /tmp/httpd-extra-config.conf /etc/apache2/extra/httpd-extra-config.conf
-  chmod -R ug+w /usr/local/Cellar/php/5.3.6/lib/php
+  chmod -R ug+w /usr/local/Cellar/php/5.3.8/lib/php
   pear config-set php_ini /usr/local/etc/php.ini
 
 echo "Installing a test phpinfo.php in the new DocumentRoot."
