@@ -1,4 +1,4 @@
-!/usr/bin/env bash
+#!/usr/bin/env bash
 
 function need_sudo {
   osascript -e 'tell app "System Events" to activate'
@@ -6,15 +6,22 @@ function need_sudo {
   osascript -e 'tell app "Terminal" to activate'
 }
 
-open /System/Library/PreferencePanes/Security.prefPane
-osascript -e 'tell app "System Events" to activate'
-osascript -e 'tell app "System Events" to display dialog "If you have not enabled FileVault, do so now and restart your machine.\n\n(The Security preference pane has been opened for you.)\n\nOnly click \"OK\" when your drive is encrypted." buttons {"Cancel", "OK"} default button 2'
+[[ `diskutil coreStorage list` == 'No CoreStorage logical volume groups found' ]] && {
+  osascript -e 'tell app "System Events" to activate'
+  osascript -e 'tell app "System Events" to display dialog "Please enable FileVault and restart, then start this process again." buttons {"OK"} default button 1'
+  open /System/Library/PreferencePanes/Security.prefPane
+  exit 1
+}
 
-open /Applications/App\ Store.app
-osascript -e 'tell app "System Events" to activate'
-osascript -e 'tell app "System Events" to display dialog "If you have not installed XCode, do so now before clicking \"OK\".\n\n(The App Store has been opened for you.)" buttons {"Cancel", "OK"} default button 2'
 type -p gcc > /dev/null || {
-  echo "Cannot find gcc. Try starting this process again."
+  open /Applications/App\ Store.app
+  osascript -e 'tell app "System Events" to activate'
+  osascript -e 'tell app "System Events" to display dialog "If you have not installed XCode, do so now before clicking \"OK\".\n\n(The App Store has been opened for you.)" buttons {"Cancel", "OK"} default button 2'
+  osascript -e 'tell app "App Store" to activate'
+}
+
+type -p gcc > /dev/null || {
+  echo "ERROR: Cannot find gcc. Try starting this process again."
   exit 1
 }
 
