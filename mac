@@ -62,6 +62,11 @@ echo "Installing Homebrew's PHP, MySQL and internationalization support."
   chmod -R ug+w /usr/local/Cellar/php/5.3.8/lib/php
   pear config-set php_ini /usr/local/etc/php.ini
 
+echo "Installing PHP extensions and a default configuration."
+  yes "" | pecl install apc memcache xdebug
+  curl -fsSL https://gist.github.com/raw/9bb79b41459f7afced2b/0b8633fcf8e189c463d9b0e290a96c48595a7e43/gistfile1.txt > /tmp/php.ini
+  mv /tmp/php.ini /usr/local/etc/php.ini
+
 open /System/Library/PreferencePanes/SharingPref.prefPane
 osascript -e 'tell app "System Events" to activate'
 osascript -e 'tell app "System Events" to display dialog "To prevent issues with Apache, please turn on Web Sharing now.\n\nClick \"OK\" once it has started to view the phpinfo() page." buttons {"Cancel", "OK"} default button 2'
