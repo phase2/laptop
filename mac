@@ -50,8 +50,13 @@ echo "Installing a test phpinfo.php in the new DocumentRoot."
     echo '<?php phpinfo();' > $HOME/htdocs/phpinfo.php
   }
 
-echo "Installing Homebrew's PHP, MySQL and internationalization support."
-  brew install https://github.com/adamv/homebrew-alt/raw/master/duplicates/php.rb --with-mysql --with-intl
+echo "Installing FreeTDS 0.82."
+  brew install https://raw.github.com/treehouseagency/homebrew-formulae/master/duplicates/freetds.rb
+
+echo "Installing Homebrew's PHP, MSSQL, MySQL and internationalization support."
+  # @TODO: Fix once this gets accepted into homebrew-alt
+  # (watch https://github.com/adamv/homebrew-alt/pull/112 for updates.)
+  brew install https://raw.github.com/smerrill/homebrew-alt/5a7b79d200f7a8e66d24f884c8695ff719c522a7/duplicates/php.rb --with-mysql --with-intl --with-mssql
   curl -fsSL https://gist.github.com/raw/9f0504965c5a3ac6e641/21853d00b80cc0610968c86993b5ffcf6e6221a9/gistfile1.txt | sed -e "s/@@USER@@/$USER/" > /tmp/httpd.conf
   curl -fsSL https://gist.github.com/raw/d5c3b90c11081ccaac6e/3e34c0d85c299beb23290b5bd321a0d534e07340/gistfile1.txt > /tmp/httpd-extra-config.conf
   curl -fsSL https://gist.github.com/raw/ce375c5af73ec5ae9f27/5ac7aa5df31ec3df8b91cfa7e1fb79af9a978d43/gistfile1.txt | sed -e "s/@@USER@@/$USER/" > /tmp/httpd-vhosts.conf
