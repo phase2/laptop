@@ -8,5 +8,6 @@ echo "Updating RubyGems."
 echo "Installing Vagrant and Veewee for working with virtual machines."
   rvm gem install vagrant veewee
 
-echo "Installing ghost for setting up local hostnames."
-  rvm gem install ghost
+# Comment out while ghost is borked.
+# echo "Installing ghost for setting up local hostnames."
+#   rvm gem install ghost
