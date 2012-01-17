@@ -130,8 +130,8 @@ echo "Installing drush-toolbox for even more awesomeness."
 bash < <(curl -s https://raw.github.com/treehouseagency/laptop/master/ruby)
 
 echo "Installing VirtualBox for virtualization."
-  curl -fsSL http://download.virtualbox.org/virtualbox/4.1.2/VirtualBox-4.1.2-73507-OSX.dmg > $HOME/Downloads/VirtualBox-4.1.2-73507-OSX.dmg
-  open $HOME/Downloads/VirtualBox-4.1.2-73507-OSX.dmg
+  curl -fsSL http://download.virtualbox.org/virtualbox/4.1.6/VirtualBox-4.1.6-74713-OSX.dmg > $HOME/Downloads/VirtualBox-4.1.6-74713-OSX.dmg
+  open $HOME/Downloads/VirtualBox-4.1.6-74713-OSX.dmg
 
 osascript -e 'tell app "System Events" to activate'
 osascript -e 'tell app "System Events" to display dialog "Please install VirtualBox and then restart.\n\nWelcome to the Treehouse!" buttons {"OK"}'
