@@ -36,7 +36,7 @@ echo "Installing a recent version of curl and wget for HTTP requests."
   brew install curl wget
 
 echo "Installing MySQL, our standard database server."
-  curl -fsSL https://raw.github.com/treehouseagency/laptop/master/conf_files/my.cnf > /tmp/my.cnf
+  curl -fsSL https://raw.github.com/phase2/laptop/master/conf_files/my.cnf > /tmp/my.cnf
   need_sudo
   sudo mv /tmp/my.cnf /etc/my.cnf
   brew install mysql
@@ -52,9 +52,9 @@ echo "Installing a test phpinfo.php in the new DocumentRoot."
 
 echo "Installing Homebrew's PHP, MSSQL, MySQL and internationalization support."
   brew install https://raw.github.com/josegonzalez/homebrew-php/f09dc1288d839c8d7118a431360d80cd7e9419d2/Formula/php.rb --with-mysql --with-intl
-  curl -fsSL https://raw.github.com/treehouseagency/laptop/master/conf_files/httpd.conf | sed -e "s/@@USER@@/$USER/" > /tmp/httpd.conf
-  curl -fsSL https://raw.github.com/treehouseagency/laptop/master/conf_files/httpd-extra-config.conf > /tmp/httpd-extra-config.conf
-  curl -fsSL https://raw.github.com/treehouseagency/laptop/master/conf_files/httpd-vhosts.conf | sed -e "s/@@USER@@/$USER/" > /tmp/httpd-vhosts.conf
+  curl -fsSL https://raw.github.com/phase2/laptop/master/conf_files/httpd.conf | sed -e "s/@@USER@@/$USER/" > /tmp/httpd.conf
+  curl -fsSL https://raw.github.com/phase2/laptop/master/conf_files/httpd-extra-config.conf > /tmp/httpd-extra-config.conf
+  curl -fsSL https://raw.github.com/phase2/laptop/master/conf_files/httpd-vhosts.conf | sed -e "s/@@USER@@/$USER/" > /tmp/httpd-vhosts.conf
   need_sudo
   sudo mv /tmp/httpd.conf /etc/apache2/httpd.conf
   sudo mv /tmp/httpd-extra-config.conf /etc/apache2/extra/httpd-extra-config.conf
@@ -71,7 +71,7 @@ echo "Installing PHP extensions and a default configuration."
   brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/xhprof-php.rb
   brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/redis-php.rb
   brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/phpsh.rb
-  curl -fsSL https://raw.github.com/treehouseagency/laptop/master/conf_files/php.ini > /tmp/php.ini
+  curl -fsSL https://raw.github.com/phase2/laptop/master/conf_files/php.ini > /tmp/php.ini
   mv /tmp/php.ini /usr/local/etc/php.ini
 
 open /System/Library/PreferencePanes/SharingPref.prefPane

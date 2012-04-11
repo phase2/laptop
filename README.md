@@ -14,7 +14,7 @@ Grab XCode from the App Store and install it.
 
 Then, open Terminal and run this one-liner:
 
-    bash < <(curl -s https://raw.github.com/treehouseagency/laptop/master/mac)
+    bash < <(curl -s https://raw.github.com/phase2/laptop/master/mac)
 
 What it sets up
 ---------------
