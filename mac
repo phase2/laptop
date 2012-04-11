@@ -23,19 +23,20 @@ type -p gcc > /dev/null || {
 
 echo "Installing Homebrew, a good OS X package manager."
   need_sudo
-  /usr/bin/ruby -e "$(curl -fsSL https://raw.github.com/gist/323731)"
+  /usr/bin/ruby -e "$(/usr/bin/curl -fksSL https://raw.github.com/mxcl/homebrew/master/Library/Contributions/install_homebrew.rb)"
   brew update
 
 echo "Installing GNU userland tools."
   brew install coreutils gnu-sed findutils
 
-echo "Install git and gist tools."
-  brew install git gist
+echo "Install GitHub-related tools."
+  brew install git gist hub
 
 echo "Installing a recent version of curl and wget for HTTP requests."
   brew install curl wget
 
 echo "Installing MySQL, our standard database server."
+  // @TODO: Pull this down to conf_files/my.cnf locally
   curl -fsSL https://gist.github.com/raw/ee51e16448d49fcc123e/f6520b9489b3c17da742467b2b082189796223c2/gistfile1.txt > /tmp/my.cnf
   need_sudo
   sudo mv /tmp/my.cnf /etc/my.cnf
@@ -50,25 +51,31 @@ echo "Installing a test phpinfo.php in the new DocumentRoot."
     echo '<?php phpinfo();' > $HOME/htdocs/phpinfo.php
   }
 
-echo "Installing FreeTDS 0.82."
-  brew install https://raw.github.com/treehouseagency/homebrew-formulae/master/duplicates/freetds.rb
-
 echo "Installing Homebrew's PHP, MSSQL, MySQL and internationalization support."
-  # @TODO: Fix once this gets accepted into homebrew-alt
-  # (watch https://github.com/adamv/homebrew-alt/pull/112 for updates.)
-  brew install https://raw.github.com/smerrill/homebrew-alt/5a7b79d200f7a8e66d24f884c8695ff719c522a7/duplicates/php.rb --with-mysql --with-intl --with-mssql
+  brew install https://raw.github.com/josegonzalez/homebrew-php/f09dc1288d839c8d7118a431360d80cd7e9419d2/Formula/php.rb --with-mysql --with-intl
+  // @TODO: Pull this down to conf_files/httpd.conf locally
   curl -fsSL https://gist.github.com/raw/9f0504965c5a3ac6e641/21853d00b80cc0610968c86993b5ffcf6e6221a9/gistfile1.txt | sed -e "s/@@USER@@/$USER/" > /tmp/httpd.conf
+  // @TODO: Pull this down to conf_files/httpd-extra-config.conf locally
   curl -fsSL https://gist.github.com/raw/d5c3b90c11081ccaac6e/3e34c0d85c299beb23290b5bd321a0d534e07340/gistfile1.txt > /tmp/httpd-extra-config.conf
+  // @TODO: Pull this down to conf_files/httpd-vhosts.conf locally
   curl -fsSL https://gist.github.com/raw/ce375c5af73ec5ae9f27/5ac7aa5df31ec3df8b91cfa7e1fb79af9a978d43/gistfile1.txt | sed -e "s/@@USER@@/$USER/" > /tmp/httpd-vhosts.conf
   need_sudo
   sudo mv /tmp/httpd.conf /etc/apache2/httpd.conf
   sudo mv /tmp/httpd-extra-config.conf /etc/apache2/extra/httpd-extra-config.conf
   sudo mv /tmp/httpd-vhosts.conf /etc/apache2/extra/httpd-vhosts.conf
-  chmod -R ug+w /usr/local/Cellar/php/5.3.8/lib/php
+  chmod -R ug+w /usr/local/Cellar/php/5.3.10/lib/php
   pear config-set php_ini /usr/local/etc/php.ini
 
 echo "Installing PHP extensions and a default configuration."
-  yes "" | pecl install apc memcache xdebug
+  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/apc-php.rb
+  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/memcached-php.rb
+  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/imagick-php.rb
+  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/pcntl-php.rb
+  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/xdebug-php.rb
+  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/xhprof-php.rb
+  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/redis-php.rb
+  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/phpsh.rb
+  // @TODO: Pull this down to conf_files/php.ini locally
   curl -fsSL https://gist.github.com/raw/9bb79b41459f7afced2b/0b8633fcf8e189c463d9b0e290a96c48595a7e43/gistfile1.txt > /tmp/php.ini
   mv /tmp/php.ini /usr/local/etc/php.ini
 
@@ -105,7 +112,8 @@ echo "Installing RVM (Ruby Version Manager) ..."
   source $HOME/.bashrc
 
 echo "Installing Drush, because we <3 Drupal."
-  brew install drush
+  pear channel-discover pear.drush.org
+  pear install drush/drush
 
 echo "Upping max open files limit."
   [[ -f /etc/launchd.conf ]] || {
@@ -113,26 +121,19 @@ echo "Upping max open files limit."
     sudo sh -c 'echo "limit maxfiles 16384" > /etc/launchd.conf'
   }
 
-echo "Installing phpsh for PHP development awesomeness."
-  mkdir $HOME/Documents/Development
-  cd $HOME/Documents/Development
-  git clone https://github.com/facebook/phpsh.git
-  cd phpsh
-  python setup.py build
-  need_sudo
-  sudo python setup.py install
-
-echo "Installing drush-toolbox for even more awesomeness."
+echo "Installing lots of Drush coolness."
   [[ -d $HOME/.drush ]] || mkdir $HOME/.drush
   cd $HOME/.drush
-  git clone https://github.com/zroger/drush-toolbox.git
+  drush dl grn
+  drush dl phpsh
+  drush dl feather
+  drush dl drush-vagrant
 
 bash < <(curl -s https://raw.github.com/treehouseagency/laptop/master/ruby)
 
 echo "Installing VirtualBox for virtualization."
-  curl -fsSL http://download.virtualbox.org/virtualbox/4.1.6/VirtualBox-4.1.6-74713-OSX.dmg > $HOME/Downloads/VirtualBox-4.1.6-74713-OSX.dmg
-  open $HOME/Downloads/VirtualBox-4.1.6-74713-OSX.dmg
+  curl -fsSL http://download.virtualbox.org/virtualbox/4.1.12/VirtualBox-4.1.12-77245-OSX.dmg > $HOME/Downloads/VirtualBox-4.1.12-77245-OSX.dmg
+  open $HOME/Downloads/VirtualBox-4.1.12-77245-OSX.dmg
 
 osascript -e 'tell app "System Events" to activate'
 osascript -e 'tell app "System Events" to display dialog "Please install VirtualBox and then restart.\n\nWelcome to the Treehouse!" buttons {"OK"}'
-
