@@ -104,14 +104,7 @@ if [ -f ~/.bashrc ]; then
    source ~/.bashrc
 fi' > $HOME/.bash_profile
 
-echo "Installing RVM (Ruby Version Manager) ..."
-  curl -s https://rvm.beginrescueend.com/install/rvm -o rvm-installer ; chmod +x rvm-installer ; ./rvm-installer --version latest
-  echo "
-# RVM
-[[ -s '/Users/`whoami`/.rvm/scripts/rvm' ]] && source '/Users/`whoami`/.rvm/scripts/rvm'" >> $HOME/.bashrc
-  source $HOME/.bashrc
-
-echo "Installing Drush, because we <3 Drupal."
+echo "Installing Drush, because we <3 Drupal and the shell."
   pear channel-discover pear.drush.org
   pear install drush/drush
 
@@ -129,11 +122,13 @@ echo "Installing lots of Drush coolness."
   drush dl feather
   drush dl drush-vagrant
 
-bash < <(curl -s https://raw.github.com/treehouseagency/laptop/master/ruby)
-
-echo "Installing VirtualBox for virtualization."
+echo "Downloading VirtualBox for virtualization."
   curl -fsSL http://download.virtualbox.org/virtualbox/4.1.12/VirtualBox-4.1.12-77245-OSX.dmg > $HOME/Downloads/VirtualBox-4.1.12-77245-OSX.dmg
   open $HOME/Downloads/VirtualBox-4.1.12-77245-OSX.dmg
 
+echo "Downloading Vagrant for virtualized dev environments."
+  curl -fsSL http://files.vagrantup.com/packages/41445466ee4d376601fd8d0c6a5e3af61d32f131/Vagrant-1.0.2.dmg > $HOME/Downloads/Vagrant-1.0.2.dmg
+  open $HOME/Downloads/Vagrant-1.0.2.dmg
+
 osascript -e 'tell app "System Events" to activate'
-osascript -e 'tell app "System Events" to display dialog "Please install VirtualBox and then restart.\n\nWelcome to the Treehouse!" buttons {"OK"}'
+osascript -e 'tell app "System Events" to display dialog "Please install Vagrant, install VirtualBox and then restart.\n\nWelcome to Phase2!" buttons {"OK"}'
