@@ -43,6 +43,8 @@ echo "Installing MySQL, our standard database server."
   unset TMPDIR
   mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=/usr/local/var/mysql --tmpdir=/tmp
   mysql.server start
+  sudo mkdir /var/mysql
+  sudo ln -s /tmp/mysql.sock /var/mysql/mysql.sock
 
 echo "Installing a test phpinfo.php in the new DocumentRoot."
   [[ -d $HOME/htdocs ]] || {
