@@ -70,7 +70,7 @@ echo "Installing PHP extensions and a default configuration."
   brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/php53-xdebug.rb
   brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/php53-xhprof.rb
   brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/php53-redis.rb
-  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/php53-phpsh.rb
+  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/phpsh.rb
   curl -fsSL https://raw.github.com/phase2/laptop/master/conf_files/php.ini > /tmp/php.ini
   mv /tmp/php.ini /usr/local/etc/php.ini
 
