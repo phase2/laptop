@@ -92,12 +92,20 @@ if [ -f $brew_prefix/etc/bash_completion ]; then
 fi
 
 # Put homebrew PHP ahead in $PATH a la http://justinhileman.info/article/reinstalling-php-53-on-mac-os-x/
-export PATH=$brew_prefix/sbin:$brew_prefix/bin:$PATH' > $HOME/.bashrc
+export PATH=$brew_prefix/sbin:$brew_prefix/bin:$PATH
+
+# If PEAR is installed, put its bin dir ahead of $PATH.
+type -P pear > /dev/null && export PATH=$(pear config-get bin_dir):$PATH
+
+# Always set up $HOME/bin in the front of $PATH.
+export PATH=$HOME/bin:$PATH' > $HOME/.bashrc
 
 echo '
 if [ -f ~/.bashrc ]; then
    source ~/.bashrc
 fi' > $HOME/.bash_profile
+
+source ~/.bashrc
 
 echo "Installing Drush, because we <3 Drupal and the shell."
   pear channel-discover pear.drush.org
