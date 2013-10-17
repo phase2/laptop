@@ -36,7 +36,7 @@ echo "Installing a recent version of curl and wget for HTTP requests."
   brew install curl wget
 
 echo "Installing MySQL, our standard database server."
-  curl -fsSL https://raw.github.com/phase2/laptop/master/conf_files/my.cnf > /tmp/my.cnf
+  curl -fsSL https://raw.github.com/srjosh/laptop/master/conf_files/my.cnf > /tmp/my.cnf
   need_sudo
   sudo mv /tmp/my.cnf /etc/my.cnf
   brew install mysql
@@ -51,28 +51,35 @@ echo "Installing a test phpinfo.php in the new DocumentRoot."
   }
 
 echo "Installing Homebrew's PHP, MSSQL, MySQL and internationalization support."
-  brew install https://raw.github.com/josegonzalez/homebrew-php/f09dc1288d839c8d7118a431360d80cd7e9419d2/Formula/php.rb --with-mysql --with-intl
-  curl -fsSL https://raw.github.com/phase2/laptop/master/conf_files/httpd.conf | sed -e "s/@@USER@@/$USER/" > /tmp/httpd.conf
-  curl -fsSL https://raw.github.com/phase2/laptop/master/conf_files/httpd-extra-config.conf > /tmp/httpd-extra-config.conf
-  curl -fsSL https://raw.github.com/phase2/laptop/master/conf_files/httpd-vhosts.conf | sed -e "s/@@USER@@/$USER/" > /tmp/httpd-vhosts.conf
+  brew tap josegonzalez/php
+  brew install php53 --with-mysql --with-intl
+  curl -fsSL https://raw.github.com/srjosh/laptop/master/conf_files/httpd.conf | sed -e "s/@@USER@@/$USER/" > /tmp/httpd.conf
+  curl -fsSL https://raw.github.com/srjosh/laptop/master/conf_files/httpd-extra-config.conf > /tmp/httpd-extra-config.conf
+  curl -fsSL https://raw.github.com/srjosh/laptop/master/conf_files/httpd-vhosts.conf | sed -e "s/@@USER@@/$USER/" > /tmp/httpd-vhosts.conf
   need_sudo
   sudo mv /tmp/httpd.conf /etc/apache2/httpd.conf
   sudo mv /tmp/httpd-extra-config.conf /etc/apache2/extra/httpd-extra-config.conf
   sudo mv /tmp/httpd-vhosts.conf /etc/apache2/extra/httpd-vhosts.conf
-  chmod -R ug+w /usr/local/Cellar/php/5.3.10/lib/php
+  chmod -R ug+w /usr/local/Cellar/php/5.3.27/lib/php
   pear config-set php_ini /usr/local/etc/php.ini
 
 echo "Installing PHP extensions and a default configuration."
-  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/php53-apc.rb
-  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/php53-memcached.rb
-  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/php53-imagick.rb
-  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/php53-pcntl.rb
-  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/php53-xdebug.rb
-  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/php53-xhprof.rb
-  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/php53-redis.rb
-  brew install https://raw.github.com/josegonzalez/homebrew-php/master/Formula/phpsh.rb
-  curl -fsSL https://raw.github.com/phase2/laptop/master/conf_files/php.ini > /tmp/php.ini
+  brew install php53-apc php53-memcached php53-imagick php53-pcntl php53-xdebug php53-xhprof php53-redis phpsh
+  curl -fsSL https://raw.github.com/srjosh/laptop/master/conf_files/php.ini > /tmp/php.ini
   mv /tmp/php.ini /usr/local/etc/php.ini
+
+  curl -fsSL https://raw.github.com/srjosh/laptop/master/conf_files/ext-imagick.ini > /tmp/ext-imagick.ini
+  mv /tmp/ext-imagick.ini /usr/local/etc/php/5.3/conf.d
+  curl -fsSL https://raw.github.com/srjosh/laptop/master/conf_files/ext-memcached.ini > /tmp/ext-memcached.ini
+  mv /tmp/ext-memcached.ini /usr/local/etc/php/5.3/conf.d
+  curl -fsSL https://raw.github.com/srjosh/laptop/master/conf_files/ext-pcntl.ini > /tmp/ext-pcntl.ini
+  mv /tmp/ext-pcntl.ini /usr/local/etc/php/5.3/conf.d
+  curl -fsSL https://raw.github.com/srjosh/laptop/master/conf_files/ext-redis.ini > /tmp/ext-redis.ini
+  mv /tmp/ext-redis.ini /usr/local/etc/php/5.3/conf.d
+  curl -fsSL https://raw.github.com/srjosh/laptop/master/conf_files/ext-xdebug.ini > /tmp/ext-xdebug.ini
+  mv /tmp/ext-xdebug.ini /usr/local/etc/php/5.3/conf.d
+  curl -fsSL https://raw.github.com/srjosh/laptop/master/conf_files/ext-xhprof.ini > /tmp/ext-xhprof.ini
+  mv /tmp/ext-xhprof.ini /usr/local/etc/php/5.3/conf.d
 
 open /System/Library/PreferencePanes/SharingPref.prefPane
 osascript -e 'tell app "System Events" to activate'
@@ -126,12 +133,19 @@ echo "Installing lots of Drush coolness."
   drush dl drush-vagrant
 
 echo "Downloading VirtualBox for virtualization."
-  curl -fsSL http://download.virtualbox.org/virtualbox/4.1.12/VirtualBox-4.1.12-77245-OSX.dmg > $HOME/Downloads/VirtualBox-4.1.12-77245-OSX.dmg
-  open $HOME/Downloads/VirtualBox-4.1.12-77245-OSX.dmg
+  curl -fsSL http://download.virtualbox.org/virtualbox/4.3.0/VirtualBox-4.3.0-89960-OSX.dmg > $HOME/Downloads/VirtualBox-4.3.0-89960-OSX.dmg
+  open $HOME/Downloads/VirtualBox-4.3.0-89960-OSX.dmg
 
 echo "Downloading Vagrant for virtualized dev environments."
-  curl -fsSL http://files.vagrantup.com/packages/41445466ee4d376601fd8d0c6a5e3af61d32f131/Vagrant-1.0.2.dmg > $HOME/Downloads/Vagrant-1.0.2.dmg
-  open $HOME/Downloads/Vagrant-1.0.2.dmg
+  curl -fsSL http://files.vagrantup.com/packages/a40522f5fabccb9ddabad03d836e120ff5d14093/Vagrant-1.3.5.dmg > $HOME/Downloads/Vagrant-1.3.5.dmg
+  open $HOME/Downloads/Vagrant-1.3.5.dmg
+
+echo "Installing PHP_CodeSniffer, and setting to drupal code standards."
+  pear install PHP_CodeSniffer
+  curl -fsSl http://ftp.drupal.org/files/projects/coder-7.x-2.x-dev.tar.gz > /tmp/coder-7.x-2.x-dev.tar.gz
+  open /tmp/coder-7.x-2.x-dev.tar.gz
+  cp -R /tmp/coder/coder_sniffer/Drupal $(brew --prefix)/Cellar/php53/5.3.27/lib/php/PHP/CodeSniffer/Standards/Drupal
+  phpcs --config-set default_standard Drupal
 
 osascript -e 'tell app "System Events" to activate'
 osascript -e 'tell app "System Events" to display dialog "Please install Vagrant, install VirtualBox and then restart.\n\nWelcome to Phase2!" buttons {"OK"}'

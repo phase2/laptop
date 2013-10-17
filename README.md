@@ -39,5 +39,6 @@ What it sets up
   * phpsh (for Drush)
 * phpsh
 * Vagrant (for managing VirtualBox virtual machines)
+* PHP_CodeSniffer (and set to drupal code standards)
 
 It should take about 40 minutes for everything to install, depending on your machine.
