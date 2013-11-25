@@ -23,7 +23,7 @@ type -p gcc > /dev/null || {
 
 echo "Installing Homebrew, a good OS X package manager."
   need_sudo
-  /usr/bin/ruby -e "$(/usr/bin/curl -fksSL https://raw.github.com/mxcl/homebrew/master/Library/Contributions/install_homebrew.rb)"
+  ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"
   brew update
 
 echo "Installing GNU userland tools."
