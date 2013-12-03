@@ -64,7 +64,7 @@ echo "Installing Homebrew's PHP, MSSQL, MySQL and internationalization support."
   pear config-set php_ini /usr/local/etc/php.ini
 
 echo "Installing PHP extensions and a default configuration."
-  brew install php53-apc php53-memcached php53-imagick php53-pcntl php53-xdebug php53-xhprof php53-redis phpsh
+  brew install php53-memcached php53-imagick php53-pcntl php53-xdebug php53-xhprof php53-redis phpsh
   curl -fsSL https://raw.github.com/srjosh/laptop/master/conf_files/php.ini > /tmp/php.ini
   mv /tmp/php.ini /usr/local/etc/php.ini
 
